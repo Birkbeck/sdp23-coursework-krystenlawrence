@@ -12,7 +12,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static sml.Registers.Register.EAX;
-import static sml.Registers.Register.EBX;
 
 class PrintInstructionTest {
 

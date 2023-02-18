@@ -34,12 +34,4 @@ class StoreInstructionTest {
     Assertions.assertEquals(7, machine.getRegisters().get(EAX));
   }
 
-  @Test
-  void executeValidTwo() {
-    registers.set(EAX, -5);
-    registers.set(EBX, 6);
-    Instruction instruction = new AddInstruction(null, EAX, EBX);
-    instruction.execute(machine);
-    Assertions.assertEquals(1, machine.getRegisters().get(EAX));
-  }
 }
