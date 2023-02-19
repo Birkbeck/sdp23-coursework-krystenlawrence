@@ -8,10 +8,15 @@ import sml.Instruction;
 import sml.Machine;
 import sml.Registers;
 
-import static sml.Registers.Register.EAX;
-import static sml.Registers.Register.EBX;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
-class DivideInstructionTest {
+import static sml.Registers.Register.EAX;
+
+class OutInstructionTest {
+
+  private final ByteArrayOutputStream out = new ByteArrayOutputStream();
+  private final PrintStream originalOut = System.out;
   private Machine machine;
   private Registers registers;
 
@@ -19,30 +24,22 @@ class DivideInstructionTest {
   void setUp() {
     machine = new Machine(new Registers());
     registers = machine.getRegisters();
-    //...
+    System.setOut(new PrintStream(out));
   }
 
   @AfterEach
   void tearDown() {
     machine = null;
     registers = null;
+    System.setOut(originalOut);
   }
 
   @Test
   void executeValid() {
-    registers.set(EAX, 20);
-    registers.set(EBX, 5);
-    Instruction instruction = new DivideInstruction(null, EAX, EBX);
+    registers.set(EAX, 10);
+    Instruction instruction = new OutInstruction(null, EAX);
     instruction.execute(machine);
-    Assertions.assertEquals(4, machine.getRegisters().get(EAX));
+    Assertions.assertEquals("10\r\n", out.toString());
   }
 
-  @Test
-  void executeValidTwo() {
-    registers.set(EAX, 18);
-    registers.set(EBX, 5);
-    Instruction instruction = new DivideInstruction(null, EAX, EBX);
-    instruction.execute(machine);
-    Assertions.assertEquals(3, machine.getRegisters().get(EAX));
-  }
 }

@@ -11,7 +11,7 @@ import sml.Registers;
 import static sml.Registers.Register.EAX;
 import static sml.Registers.Register.EBX;
 
-class StoreInstructionTest {
+class SubInstructionTest {
   private Machine machine;
   private Registers registers;
 
@@ -29,9 +29,19 @@ class StoreInstructionTest {
 
   @Test
   void executeValid() {
-    Instruction instruction = new StoreInstruction(null, EAX, 7);
+    registers.set(EAX, 8);
+    registers.set(EBX, 2);
+    Instruction instruction = new SubInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(7, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(6, machine.getRegisters().get(EAX));
   }
 
+  @Test
+  void executeValidTwo() {
+    registers.set(EAX, 10);
+    registers.set(EBX, 12);
+    Instruction instruction = new SubInstruction(null, EAX, EBX);
+    instruction.execute(machine);
+    Assertions.assertEquals(-2, machine.getRegisters().get(EAX));
+  }
 }

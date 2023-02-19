@@ -9,9 +9,8 @@ import sml.Machine;
 import sml.Registers;
 
 import static sml.Registers.Register.EAX;
-import static sml.Registers.Register.EBX;
 
-class MultiplyInstructionTest {
+class MovInstructionTest {
   private Machine machine;
   private Registers registers;
 
@@ -19,7 +18,6 @@ class MultiplyInstructionTest {
   void setUp() {
     machine = new Machine(new Registers());
     registers = machine.getRegisters();
-    //...
   }
 
   @AfterEach
@@ -30,19 +28,9 @@ class MultiplyInstructionTest {
 
   @Test
   void executeValid() {
-    registers.set(EAX, 8);
-    registers.set(EBX, 4);
-    Instruction instruction = new MultiplyInstruction(null, EAX, EBX);
+    Instruction instruction = new MovInstruction(null, 7, EAX);
     instruction.execute(machine);
-    Assertions.assertEquals(32, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(7, machine.getRegisters().get(EAX));
   }
 
-  @Test
-  void executeValidTwo() {
-    registers.set(EAX, -6);
-    registers.set(EBX, 7);
-    Instruction instruction = new MultiplyInstruction(null, EAX, EBX);
-    instruction.execute(machine);
-    Assertions.assertEquals(-42, machine.getRegisters().get(EAX));
-  }
 }

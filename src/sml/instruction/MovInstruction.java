@@ -9,16 +9,16 @@ import sml.RegisterName;
  * @author
  */
 
-public class StoreInstruction extends Instruction {
+public class MovInstruction extends Instruction {
 	private final RegisterName result;
 	private final int integer;
 
 	public static final String OP_CODE = "mov";
 
-	public StoreInstruction(String label, RegisterName result, int integer) {
+	public MovInstruction(String label, int integer, RegisterName result) {
 		super(label, OP_CODE);
-		this.result = result;
 		this.integer = integer;
+		this.result = result;
 	}
 
 	@Override

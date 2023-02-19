@@ -9,13 +9,13 @@ import sml.RegisterName;
  * @author
  */
 
-public class PrintInstruction extends Instruction {
+public class OutInstruction extends Instruction {
 
 	private final RegisterName source;
 
 	public static final String OP_CODE = "out";
 
-	public PrintInstruction(String label, RegisterName source) {
+	public OutInstruction(String label, RegisterName source) {
 		super(label, OP_CODE);
 		this.source = source;
 	}

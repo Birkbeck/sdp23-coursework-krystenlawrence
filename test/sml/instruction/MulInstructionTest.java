@@ -8,39 +8,40 @@ import sml.Instruction;
 import sml.Machine;
 import sml.Registers;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import static sml.Registers.Register.EAX;
+import static sml.Registers.Register.EBX;
 
-class PrintInstructionTest {
-
-  private final ByteArrayOutputStream out = new ByteArrayOutputStream();
-  private final PrintStream originalOut = System.out;
+class MulInstructionTest {
   private Machine machine;
   private Registers registers;
-
 
   @BeforeEach
   void setUp() {
     machine = new Machine(new Registers());
     registers = machine.getRegisters();
-    System.setOut(new PrintStream(out));
   }
 
   @AfterEach
   void tearDown() {
     machine = null;
     registers = null;
-    System.setOut(originalOut);
   }
 
   @Test
   void executeValid() {
-    registers.set(EAX, 10);
-    Instruction instruction = new PrintInstruction(null, EAX);
+    registers.set(EAX, 8);
+    registers.set(EBX, 4);
+    Instruction instruction = new MulInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals("10\r\n", out.toString());
+    Assertions.assertEquals(32, machine.getRegisters().get(EAX));
   }
 
+  @Test
+  void executeValidTwo() {
+    registers.set(EAX, -6);
+    registers.set(EBX, 7);
+    Instruction instruction = new MulInstruction(null, EAX, EBX);
+    instruction.execute(machine);
+    Assertions.assertEquals(-42, machine.getRegisters().get(EAX));
+  }
 }

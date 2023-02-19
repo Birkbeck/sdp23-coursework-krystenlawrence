@@ -11,7 +11,7 @@ import sml.Registers;
 import static sml.Registers.Register.EAX;
 import static sml.Registers.Register.EBX;
 
-class SubtractInstructionTest {
+class DivInstructionTest {
   private Machine machine;
   private Registers registers;
 
@@ -19,7 +19,6 @@ class SubtractInstructionTest {
   void setUp() {
     machine = new Machine(new Registers());
     registers = machine.getRegisters();
-    //...
   }
 
   @AfterEach
@@ -30,19 +29,19 @@ class SubtractInstructionTest {
 
   @Test
   void executeValid() {
-    registers.set(EAX, 8);
-    registers.set(EBX, 2);
-    Instruction instruction = new SubtractInstruction(null, EAX, EBX);
+    registers.set(EAX, 20);
+    registers.set(EBX, 5);
+    Instruction instruction = new DivInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(6, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(4, machine.getRegisters().get(EAX));
   }
 
   @Test
   void executeValidTwo() {
-    registers.set(EAX, 10);
-    registers.set(EBX, 12);
-    Instruction instruction = new SubtractInstruction(null, EAX, EBX);
+    registers.set(EAX, 18);
+    registers.set(EBX, 5);
+    Instruction instruction = new DivInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(-2, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(3, machine.getRegisters().get(EAX));
   }
 }
