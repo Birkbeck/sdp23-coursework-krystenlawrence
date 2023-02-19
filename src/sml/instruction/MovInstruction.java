@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /**
  * An instruction subclass that stores the value of an integer and stores in a particular register
- * @author
+ * @author Krysten Lawrence
  */
 
 public class MovInstruction extends Instruction {

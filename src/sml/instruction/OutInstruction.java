@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /**
  * An instruction subclass that prints the contents of the given register to the console
- * @author
+ * @author Krysten Lawrence
  */
 
 public class OutInstruction extends Instruction {

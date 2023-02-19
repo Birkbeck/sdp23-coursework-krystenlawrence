@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * An instruction subclass that takes the values of two registers - r1 and r2 - adds them together and stores the
  * result in the first register - r1.
- * @author
+ * @author Krysten Lawrence
  */
 
 public class AddInstruction extends Instruction {

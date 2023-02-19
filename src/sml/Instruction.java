@@ -1,13 +1,11 @@
 package sml;
 
-// TODO: write a JavaDoc for the class
-
 import java.util.Objects;
 
 /**
  * Represents an abstract instruction.
  *
- * @author ...
+ * @author Krysten Lawrence
  */
 public abstract class Instruction {
     protected final String label;

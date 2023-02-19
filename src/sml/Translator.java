@@ -32,7 +32,7 @@ public final class Translator {
     // prog (the program)
     // return "no errors were detected"
 
-    public void readAndTranslate(Labels labels, List<Instruction> program) throws Exception {
+    public void readAndTranslate(Labels labels, List<Instruction> program) throws IOException {
         try (var sc = new Scanner(new File(fileName), StandardCharsets.UTF_8)) {
             labels.reset();
             program.clear();
@@ -107,8 +107,6 @@ public final class Translator {
                 String s = scan();
                 return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
             }
-
-
 
             // TODO: Then, replace the switch by using the Reflection API
 

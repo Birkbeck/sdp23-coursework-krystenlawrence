@@ -20,13 +20,13 @@ public final class Labels {
 	 * @param label the label
 	 * @param address the address the label refers to
 	 */
-	public void addLabel(String label, int address) throws Exception {
+	public void addLabel(String label, int address){
 		Objects.requireNonNull(label);
 		if(!labels.containsKey(label)){
 			labels.put(label, address);
 		}
 		else{
-			throw new Exception("Label already exists, please choose another value");
+			throw new IllegalArgumentException("Label already exists, please choose another value");
 		}
 	}
 

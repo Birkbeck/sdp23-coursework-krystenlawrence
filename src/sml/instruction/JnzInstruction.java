@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * An instruction subclass that checks the contents of a register r. If the contents are not equal to 0, then
  * statement of the given label l is to be the next statement to execute.
- * @author
+ * @author Krysten Lawrence
  */
 
 public class JnzInstruction extends Instruction {
@@ -29,8 +29,7 @@ public class JnzInstruction extends Instruction {
 	public int execute(Machine m) {
 		int value = m.getRegisters().get(source);
 		if(value != 0){
-			Labels labels = new Labels();
-			return labels.getAddress(givenLabel);
+			return m.getLabels().getAddress(givenLabel);
 		}
 		return NORMAL_PROGRAM_COUNTER_UPDATE;
 	}

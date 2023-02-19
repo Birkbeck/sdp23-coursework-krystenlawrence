@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * An instruction subclass that takes the contents of two registers - r1 and r2 - divides the contents of r1 by the
  * contents of r2 and stores the result in r1.
- * @author
+ * @author Krysten Lawrence
  */
 
 public class DivInstruction extends Instruction {
