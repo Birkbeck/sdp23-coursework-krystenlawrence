@@ -4,6 +4,8 @@ import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
 
+import java.util.Objects;
+
 /**
  * An instruction subclass that prints the contents of the given register to the console
  * @author
@@ -30,5 +32,19 @@ public class OutInstruction extends Instruction {
 	@Override
 	public String toString() {
 		return getLabelString() + getOpcode() + " " + source;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof OutInstruction out) {
+			return this.getClass().equals(out.getClass())
+					&& this.source.equals(out.source);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(source);
 	}
 }

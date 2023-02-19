@@ -4,6 +4,8 @@ import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
 
+import java.util.Objects;
+
 
 /**
  * An instruction subclass that takes the contents of two registers - r1 and r2 - subtracts the contents of r1 by the
@@ -34,5 +36,20 @@ public class SubInstruction extends Instruction {
 	@Override
 	public String toString() {
 		return getLabelString() + getOpcode() + " " + result + " " + source;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof SubInstruction s) {
+			return this.getClass().equals(s.getClass())
+					&& this.result.equals(s.result)
+					&& this.source.equals(s.source);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(result, source);
 	}
 }

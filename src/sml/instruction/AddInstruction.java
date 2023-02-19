@@ -4,6 +4,8 @@ import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
 
+import java.util.Objects;
+
 /**
  * An instruction subclass that takes the values of two registers - r1 and r2 - adds them together and stores the
  * result in the first register - r1.
@@ -33,5 +35,20 @@ public class AddInstruction extends Instruction {
 	@Override
 	public String toString() {
 		return getLabelString() + getOpcode() + " " + result + " " + source;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof AddInstruction a) {
+			return this.getClass().equals(a.getClass())
+					&& this.result.equals(a.result)
+					&& this.source.equals(a.source);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(result, source);
 	}
 }
