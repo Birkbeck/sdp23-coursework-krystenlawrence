@@ -51,7 +51,9 @@ public abstract class Instruction {
     }
 
     // TODO: What does abstract in the declaration below mean?
-    //       (Write a short explanation.)
+    //       The abstract in the method name means that the method does not need to be implemented to be declared
+    //       In the below example, this means that, whilst the method is ordinarilt supposed to return a String, because
+    //       of the abstract declaration, it does not need to return anything
     @Override
     public abstract String toString();
 
