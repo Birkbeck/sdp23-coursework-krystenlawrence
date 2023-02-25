@@ -1,9 +1,7 @@
 package sml;
 
-import sml.instruction.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -27,7 +25,7 @@ public final class Translator {
     private Class<?> unknownClass;
 
     public Translator(String fileName) {
-        this.fileName =  fileName;
+        this.fileName = fileName;
     }
 
     // translate the small program in the file into lab (the labels) and
@@ -63,45 +61,47 @@ public final class Translator {
      * The input line should consist of a single SML instruction,
      * with its label already removed.
      */
-    private Instruction getInstruction(String label) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    private Instruction getInstruction(String label) throws Exception {
         if (line.isEmpty())
             return null;
 
         String opcode = scan();
+        // A list of values that have been read from the sml file that will be used to construct
+        // the type of Instruction. Opcode has been removed and label is added whether it is null
+        // or not, hence the String.valueOf(). Subsequent commands are added
         List<String> lineVariables = new ArrayList<>();
         lineVariables.add(String.valueOf(label));
-
-        while(line.contains(" ")){
+        while (line.contains(" ")) {
             lineVariables.add(scan());
         }
 
-        opcode = opcode.substring(0,1).toUpperCase() + opcode.substring(1);
+        opcode = opcode.substring(0, 1).toUpperCase() + opcode.substring(1);
         this.unknownClass = Class.forName("sml.instruction." + opcode + "Instruction");
 
-        for(Constructor<?> constructor : unknownClass.getConstructors()){
-            Object[] objects = new Object[lineVariables.size()];
-            Class<?>[] paramCons = constructor.getParameterTypes();
+        for (Constructor<?> constructor : unknownClass.getConstructors()) {
+            Object[] classConstructors = new Object[lineVariables.size()];
+            Class<?>[] constructorParamTypes = constructor.getParameterTypes();
             for (int i = 0; i < lineVariables.size(); i++) {
-                Class<?> c = toWrapper(paramCons[i]);
-                if(c.getName().contains("Register")){
-                    objects[i] = Register.valueOf(lineVariables.get(i));
-                }
-                else if(c.getName().contains("Integer")){
-                    objects[i] = Integer.parseInt(lineVariables.get(i));
-                }
-                else{
-                    objects[i] = (c.getName().contains("String") && lineVariables.get(i).contains("null")) ? null : lineVariables.get(i);
+                Class<?> newClass = toWrapper(constructorParamTypes[i]);
+                // Assume only constructors of type Integer, Register and String will be used
+                if (newClass.getName().contains("Register")) {
+                    classConstructors[i] = Register.valueOf(lineVariables.get(i));
+                } else if (newClass.getName().contains("Integer")) {
+                    classConstructors[i] = Integer.parseInt(lineVariables.get(i));
+                } else if (newClass.getName().contains("String")) {
+                    classConstructors[i] = (lineVariables.get(i).contains("null"))
+                            ? null
+                            : lineVariables.get(i);
+                } else{
+                    throw new NoSuchFieldException(newClass.getName() + " is not currently used");
                 }
             }
-            return (Instruction) constructor.newInstance(objects);
+            return (Instruction) constructor.newInstance(classConstructors);
 
         }
 
-
-            // TODO: Then, replace the switch by using the Reflection API
-
-            // TODO: Next, use dependency injection to allow this machine class
-            //       to work with different sets of opcodes (different CPUs)
+        // TODO: Next, use dependency injection to allow this machine class
+        //       to work with different sets of opcodes (different CPUs)
 
         return null;
     }
