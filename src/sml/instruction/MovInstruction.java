@@ -17,7 +17,7 @@ public class MovInstruction extends Instruction {
 
 	public static final String OP_CODE = "mov";
 
-	public MovInstruction(String label, int integer, RegisterName result) {
+	public MovInstruction(String label, RegisterName result, int integer) {
 		super(label, OP_CODE);
 		this.integer = integer;
 		this.result = result;

@@ -29,7 +29,7 @@ class MovInstructionTest {
 
   @Test
   void executeValid() {
-    Instruction instruction = new MovInstruction(null, 7, EAX);
+    Instruction instruction = new MovInstruction(null, EAX, 7);
     instruction.execute(machine);
     Assertions.assertEquals(7, machine.getRegisters().get(EAX));
   }
