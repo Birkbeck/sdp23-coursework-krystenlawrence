@@ -22,8 +22,6 @@ public final class Translator {
     // line contains the characters in the current line that's not been processed yet
     private String line = "";
 
-    private Class<?> unknownClass;
-
     public Translator(String fileName) {
         this.fileName = fileName;
     }
@@ -76,12 +74,15 @@ public final class Translator {
         }
 
         opcode = opcode.substring(0, 1).toUpperCase() + opcode.substring(1);
-        this.unknownClass = Class.forName("sml.instruction." + opcode + "Instruction");
+        Class<?> unknownClass = Class.forName("sml.instruction." + opcode + "Instruction");
 
         for (Constructor<?> constructor : unknownClass.getConstructors()) {
+
             Object[] classConstructors = new Object[lineVariables.size()];
             Class<?>[] constructorParamTypes = constructor.getParameterTypes();
+
             for (int i = 0; i < lineVariables.size(); i++) {
+
                 Class<?> newClass = toWrapper(constructorParamTypes[i]);
                 // Assume only constructors of type Integer, Register and String will be used
                 if (newClass.getName().contains("Register")) {
@@ -134,16 +135,9 @@ public final class Translator {
         return line;
     }
 
+    // Only Integer is used at the moment, more can be added if needs be
     private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_WRAPPERS = Map.of(
-            int.class, Integer.class,
-            long.class, Long.class,
-            boolean.class, Boolean.class,
-            byte.class, Byte.class,
-            char.class, Character.class,
-            float.class, Float.class,
-            double.class, Double.class,
-            short.class, Short.class,
-            void.class, Void.class);
+            int.class, Integer.class);
 
     /**
      * Return the correct Wrapper class if testClass is primitive
