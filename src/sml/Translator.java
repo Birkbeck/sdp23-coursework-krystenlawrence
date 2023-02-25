@@ -4,9 +4,9 @@ import sml.instruction.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.*;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static sml.Registers.Register;
 
@@ -24,6 +24,8 @@ public final class Translator {
     // line contains the characters in the current line that's not been processed yet
     private String line = "";
 
+    private Class<?> unknownClass;
+
     public Translator(String fileName) {
         this.fileName =  fileName;
     }
@@ -32,7 +34,7 @@ public final class Translator {
     // prog (the program)
     // return "no errors were detected"
 
-    public void readAndTranslate(Labels labels, List<Instruction> program) throws IOException {
+    public void readAndTranslate(Labels labels, List<Instruction> program) throws Exception {
         try (var sc = new Scanner(new File(fileName), StandardCharsets.UTF_8)) {
             labels.reset();
             program.clear();
@@ -61,62 +63,46 @@ public final class Translator {
      * The input line should consist of a single SML instruction,
      * with its label already removed.
      */
-    private Instruction getInstruction(String label) {
+    private Instruction getInstruction(String label) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
         if (line.isEmpty())
             return null;
 
         String opcode = scan();
-        switch (opcode) {
-            case AddInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new AddInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
+        List<String> lineVariables = new ArrayList<>();
+        lineVariables.add(String.valueOf(label));
 
-            case DivInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new DivInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
+        while(line.contains(" ")){
+            lineVariables.add(scan());
+        }
 
-            case JnzInstruction.OP_CODE -> {
-                String r = scan();
-                String l = scan();
-                return new JnzInstruction(label, l, Register.valueOf(r));
-            }
+        opcode = opcode.substring(0,1).toUpperCase() + opcode.substring(1);
+        this.unknownClass = Class.forName("sml.instruction." + opcode + "Instruction");
 
-            case MulInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new MulInstruction(label, Register.valueOf(r), Register.valueOf(s));
+        for(Constructor<?> constructor : unknownClass.getConstructors()){
+            Object[] objects = new Object[lineVariables.size()];
+            Class<?>[] paramCons = constructor.getParameterTypes();
+            for (int i = 0; i < lineVariables.size(); i++) {
+                Class<?> c = toWrapper(paramCons[i]);
+                if(c.getName().contains("Register")){
+                    objects[i] = Register.valueOf(lineVariables.get(i));
+                }
+                else if(c.getName().contains("Integer")){
+                    objects[i] = Integer.parseInt(lineVariables.get(i));
+                }
+                else{
+                    objects[i] = (c.getName().contains("String") && lineVariables.get(i).contains("null")) ? null : lineVariables.get(i);
+                }
             }
+            return (Instruction) constructor.newInstance(objects);
 
-            case OutInstruction.OP_CODE -> {
-                String s = scan();
-                return new OutInstruction(label, Register.valueOf(s));
-            }
+        }
 
-            case MovInstruction.OP_CODE -> {
-                String r = scan();
-                String x = scan();
-                return new MovInstruction(label, Integer.parseInt(x), Register.valueOf(r));
-            }
-
-            case SubInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
 
             // TODO: Then, replace the switch by using the Reflection API
 
             // TODO: Next, use dependency injection to allow this machine class
             //       to work with different sets of opcodes (different CPUs)
 
-            default -> {
-                System.out.println("Unknown instruction: " + opcode);
-            }
-        }
         return null;
     }
 
@@ -146,5 +132,26 @@ public final class Translator {
             }
 
         return line;
+    }
+
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_WRAPPERS = Map.of(
+            int.class, Integer.class,
+            long.class, Long.class,
+            boolean.class, Boolean.class,
+            byte.class, Byte.class,
+            char.class, Character.class,
+            float.class, Float.class,
+            double.class, Double.class,
+            short.class, Short.class,
+            void.class, Void.class);
+
+    /**
+     * Return the correct Wrapper class if testClass is primitive
+     *
+     * @param testClass class being tested
+     * @return Object class or testClass
+     */
+    private static Class<?> toWrapper(Class<?> testClass) {
+        return PRIMITIVE_TYPE_WRAPPERS.getOrDefault(testClass, testClass);
     }
 }
