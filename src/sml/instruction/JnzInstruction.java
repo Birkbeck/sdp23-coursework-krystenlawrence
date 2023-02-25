@@ -19,7 +19,7 @@ public class JnzInstruction extends Instruction {
 
 	public static final String OP_CODE = "jnz";
 
-	public JnzInstruction(String label, String givenLabel, RegisterName source) {
+	public JnzInstruction(String label, RegisterName source, String givenLabel) {
 		super(label, OP_CODE);
 		this.givenLabel = givenLabel;
 		this.source = source;
