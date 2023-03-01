@@ -3,11 +3,11 @@ package sml;
 import java.util.*;
 import java.util.stream.Collectors;
 
-// TODO: write a JavaDoc for the class
-
 /**
+ * A class that holds the registers used for the machine, new registers can be added to the enum
+ * if required
  *
- * @author ...
+ * @author Krysten Lawrence
  */
 public final class Registers {
     private final Map<Register, Integer> registers = new HashMap<>();

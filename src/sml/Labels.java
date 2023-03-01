@@ -5,11 +5,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-// TODO: write a JavaDoc for the class
-
 /**
- *
- * @author ...
+ * An object that contains all the labels associated with the .sml file that is being read
+ * @author Krysten Lawrence
  */
 public final class Labels {
 	private final Map<String, Integer> labels = new HashMap<>();
@@ -38,8 +36,8 @@ public final class Labels {
 	 */
 	public int getAddress(String label) {
 		// TODO: Where can NullPointerException be thrown here?
-		//       A NullPointerException can be thrown if a search is done on the labels map and no key named for the
-		//       given value is found
+		//       A NullPointerException can be thrown if a search is done on the labels map and
+		//       no key named for the given value is found
 		if(!labels.containsKey(label)){
 			throw new NullPointerException("The label does not exist");
 		}
