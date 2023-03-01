@@ -7,8 +7,8 @@ import sml.RegisterName;
 import java.util.Objects;
 
 /**
- * An instruction subclass that takes the contents of two registers - r1 and r2 - divides the contents of r1 by the
- * contents of r2 and stores the result in r1.
+ * An instruction subclass that takes the contents of two registers - r1 and r2 - divides the
+ * contents of r1 by the contents of r2 and stores the result in r1.
  * @author Krysten Lawrence
  */
 
@@ -38,8 +38,8 @@ public class DivInstruction extends Instruction {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o instanceof DivInstruction d) {
+	public boolean equals(Object obj) {
+		if (obj instanceof DivInstruction d) {
 			return this.getClass().equals(d.getClass())
 					&& this.result.equals(d.result)
 					&& this.source.equals(d.source);

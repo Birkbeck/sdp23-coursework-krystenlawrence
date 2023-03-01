@@ -7,8 +7,8 @@ import sml.RegisterName;
 import java.util.Objects;
 
 /**
- * An instruction subclass that takes the values of two registers - r1 and r2 - multiplies them and stores the
- * result in the first register - r1.
+ * An instruction subclass that takes the values of two registers - r1 and r2 - multiplies them and
+ * stores the result in the first register - r1.
  * @author Krysten Lawrence
  */
 
@@ -38,8 +38,8 @@ public class MulInstruction extends Instruction {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o instanceof MulInstruction m) {
+	public boolean equals(Object obj) {
+		if (obj instanceof MulInstruction m) {
 			return this.getClass().equals(m.getClass())
 					&& this.result.equals(m.result)
 					&& this.source.equals(m.source);

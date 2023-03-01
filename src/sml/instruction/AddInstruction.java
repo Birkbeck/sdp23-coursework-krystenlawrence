@@ -7,8 +7,8 @@ import sml.RegisterName;
 import java.util.Objects;
 
 /**
- * An instruction subclass that takes the values of two registers - r1 and r2 - adds them together and stores the
- * result in the first register - r1.
+ * An instruction subclass that takes the values of two registers - r1 and r2 - adds them together
+ * and stores the result in the first register - r1.
  * @author Krysten Lawrence
  */
 
@@ -38,8 +38,8 @@ public class AddInstruction extends Instruction {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o instanceof AddInstruction a) {
+	public boolean equals(Object obj) {
+		if (obj instanceof AddInstruction a) {
 			return this.getClass().equals(a.getClass())
 					&& this.result.equals(a.result)
 					&& this.source.equals(a.source);

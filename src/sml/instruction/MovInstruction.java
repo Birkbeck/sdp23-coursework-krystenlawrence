@@ -35,8 +35,8 @@ public class MovInstruction extends Instruction {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o instanceof MovInstruction m) {
+	public boolean equals(Object obj) {
+		if (obj instanceof MovInstruction m) {
 			return this.getClass().equals(m.getClass())
 					&& this.result.equals(m.result)
 					&& this.integer == m.integer;

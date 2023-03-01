@@ -1,15 +1,14 @@
 package sml.instruction;
 
 import sml.Instruction;
-import sml.Labels;
 import sml.Machine;
 import sml.RegisterName;
 
 import java.util.Objects;
 
 /**
- * An instruction subclass that checks the contents of a register r. If the contents are not equal to 0, then
- * statement of the given label l is to be the next statement to execute.
+ * An instruction subclass that checks the contents of a register r. If the contents are not equal
+ * to 0, then statement of the given label l is to be the next statement to execute.
  * @author Krysten Lawrence
  */
 
@@ -40,8 +39,8 @@ public class JnzInstruction extends Instruction {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o instanceof JnzInstruction j) {
+	public boolean equals(Object obj) {
+		if (obj instanceof JnzInstruction j) {
 			return this.getClass().equals(j.getClass())
 					&& this.source.equals(j.source)
 					&& this.givenLabel.equals(j.givenLabel);

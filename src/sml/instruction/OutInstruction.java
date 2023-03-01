@@ -35,8 +35,8 @@ public class OutInstruction extends Instruction {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o instanceof OutInstruction out) {
+	public boolean equals(Object obj) {
+		if (obj instanceof OutInstruction out) {
 			return this.getClass().equals(out.getClass())
 					&& this.source.equals(out.source);
 		}

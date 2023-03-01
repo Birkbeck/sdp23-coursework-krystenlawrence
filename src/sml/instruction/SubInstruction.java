@@ -8,8 +8,8 @@ import java.util.Objects;
 
 
 /**
- * An instruction subclass that takes the contents of two registers - r1 and r2 - subtracts the contents of r1 by the
- * contents of r2 and stores the result in r1.
+ * An instruction subclass that takes the contents of two registers - r1 and r2 - subtracts the
+ * contents of r1 by the contents of r2 and stores the result in r1.
  * @author Krysten Lawrence
  */
 
@@ -39,8 +39,8 @@ public class SubInstruction extends Instruction {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o instanceof SubInstruction s) {
+	public boolean equals(Object obj) {
+		if (obj instanceof SubInstruction s) {
 			return this.getClass().equals(s.getClass())
 					&& this.result.equals(s.result)
 					&& this.source.equals(s.source);
