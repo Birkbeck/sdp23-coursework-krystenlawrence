@@ -13,7 +13,7 @@ import static sml.Registers.Register;
  * <p>
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
  *
- * @author ...
+ * @author Krysten Lawrence
  */
 public final class Translator {
 
@@ -58,6 +58,7 @@ public final class Translator {
      * <p>
      * The input line should consist of a single SML instruction,
      * with its label already removed.
+     * Exception is used as this method throws multiple types of Exception
      */
     private Instruction getInstruction(String label) throws Exception {
         if (line.isEmpty())
@@ -66,13 +67,15 @@ public final class Translator {
         String opcode = scan();
         // A list of values that have been read from the sml file that will be used to construct
         // the type of Instruction. Opcode has been removed and label is added whether it is null
-        // or not, hence the String.valueOf(). Subsequent commands are added
+        // or not, hence the String.valueOf(). Subsequent commands are added.
         List<String> lineVariables = new ArrayList<>();
         lineVariables.add(String.valueOf(label));
         while (line.contains(" ")) {
             lineVariables.add(scan());
         }
 
+        // Create the class name by capitalising the first letter then adding the package and
+        // Instruction
         opcode = opcode.substring(0, 1).toUpperCase() + opcode.substring(1);
         Class<?> unknownClass = Class.forName("sml.instruction." + opcode + "Instruction");
 
@@ -80,6 +83,8 @@ public final class Translator {
 
             Object[] classConstructors = new Object[lineVariables.size()];
             Class<?>[] constructorParamTypes = constructor.getParameterTypes();
+            // Find the constructors, parse them and marry them with the variables read from the
+            // .sml file
 
             for (int i = 0; i < lineVariables.size(); i++) {
 
@@ -100,9 +105,6 @@ public final class Translator {
             return (Instruction) constructor.newInstance(classConstructors);
 
         }
-
-        // TODO: Next, use dependency injection to allow this machine class
-        //       to work with different sets of opcodes (different CPUs)
 
         return null;
     }
