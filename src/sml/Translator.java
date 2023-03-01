@@ -1,12 +1,10 @@
 package sml;
 
-import sml.instruction.*;
 
 import java.io.File;
-import java.io.IOException;
+import java.lang.reflect.*;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static sml.Registers.Register;
 
@@ -15,7 +13,7 @@ import static sml.Registers.Register;
  * <p>
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
  *
- * @author ...
+ * @author Krysten Lawrence
  */
 public final class Translator {
 
@@ -25,14 +23,14 @@ public final class Translator {
     private String line = "";
 
     public Translator(String fileName) {
-        this.fileName =  fileName;
+        this.fileName = fileName;
     }
 
     // translate the small program in the file into lab (the labels) and
     // prog (the program)
     // return "no errors were detected"
 
-    public void readAndTranslate(Labels labels, List<Instruction> program) throws IOException {
+    public void readAndTranslate(Labels labels, List<Instruction> program) throws Exception {
         try (var sc = new Scanner(new File(fileName), StandardCharsets.UTF_8)) {
             labels.reset();
             program.clear();
@@ -60,63 +58,54 @@ public final class Translator {
      * <p>
      * The input line should consist of a single SML instruction,
      * with its label already removed.
+     * Exception is used as this method throws multiple types of Exception
      */
-    private Instruction getInstruction(String label) {
+    private Instruction getInstruction(String label) throws Exception {
         if (line.isEmpty())
             return null;
 
         String opcode = scan();
-        switch (opcode) {
-            case AddInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new AddInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-
-            case DivInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new DivInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-
-            case JnzInstruction.OP_CODE -> {
-                String r = scan();
-                String l = scan();
-                return new JnzInstruction(label, l, Register.valueOf(r));
-            }
-
-            case MulInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new MulInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-
-            case OutInstruction.OP_CODE -> {
-                String s = scan();
-                return new OutInstruction(label, Register.valueOf(s));
-            }
-
-            case MovInstruction.OP_CODE -> {
-                String r = scan();
-                String x = scan();
-                return new MovInstruction(label, Integer.parseInt(x), Register.valueOf(r));
-            }
-
-            case SubInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-
-            // TODO: Then, replace the switch by using the Reflection API
-
-            // TODO: Next, use dependency injection to allow this machine class
-            //       to work with different sets of opcodes (different CPUs)
-
-            default -> {
-                System.out.println("Unknown instruction: " + opcode);
-            }
+        // A list of values that have been read from the sml file that will be used to construct
+        // the type of Instruction. Opcode has been removed and label is added whether it is null
+        // or not, hence the String.valueOf(). Subsequent commands are added.
+        List<String> lineVariables = new ArrayList<>();
+        lineVariables.add(String.valueOf(label));
+        while (line.contains(" ")) {
+            lineVariables.add(scan());
         }
+
+        // Create the class name by capitalising the first letter then adding the package and
+        // Instruction
+        opcode = opcode.substring(0, 1).toUpperCase() + opcode.substring(1);
+        Class<?> unknownClass = Class.forName("sml.instruction." + opcode + "Instruction");
+
+        for (Constructor<?> constructor : unknownClass.getConstructors()) {
+
+            Object[] classConstructors = new Object[lineVariables.size()];
+            Class<?>[] constructorParamTypes = constructor.getParameterTypes();
+            // Find the constructors, parse them and marry them with the variables read from the
+            // .sml file
+
+            for (int i = 0; i < lineVariables.size(); i++) {
+
+                Class<?> newClass = toWrapper(constructorParamTypes[i]);
+                // Assume only constructors of type Integer, Register and String will be used
+                if (newClass.getName().contains("Register")) {
+                    classConstructors[i] = Register.valueOf(lineVariables.get(i));
+                } else if (newClass.getName().contains("Integer")) {
+                    classConstructors[i] = Integer.parseInt(lineVariables.get(i));
+                } else if (newClass.getName().contains("String")) {
+                    classConstructors[i] = (lineVariables.get(i).contains("null"))
+                            ? null
+                            : lineVariables.get(i);
+                } else{
+                    throw new NoSuchFieldException(newClass.getName() + " is not currently used");
+                }
+            }
+            return (Instruction) constructor.newInstance(classConstructors);
+
+        }
+
         return null;
     }
 
@@ -146,5 +135,19 @@ public final class Translator {
             }
 
         return line;
+    }
+
+    // Only Integer is used at the moment, more can be added if needs be
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_WRAPPERS = Map.of(
+            int.class, Integer.class);
+
+    /**
+     * Return the correct Wrapper class if testClass is primitive
+     *
+     * @param testClass class being tested
+     * @return Object class or testClass
+     */
+    private static Class<?> toWrapper(Class<?> testClass) {
+        return PRIMITIVE_TYPE_WRAPPERS.getOrDefault(testClass, testClass);
     }
 }
