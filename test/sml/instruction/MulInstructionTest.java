@@ -44,4 +44,20 @@ class MulInstructionTest {
     instruction.execute(machine);
     Assertions.assertEquals(-42, machine.getRegisters().get(EAX));
   }
+
+  @Test
+  void assertObjectsTrue() {
+    Instruction instruction = new MulInstruction(null, EAX, EBX);
+    Instruction secondInstruction = new MulInstruction(null, EAX, EBX);
+    boolean isEquals = instruction.equals(secondInstruction);
+    Assertions.assertTrue(isEquals);
+  }
+
+  @Test
+  void assertObjectsFalse() {
+    Instruction instruction = new MulInstruction(null, EAX, EBX);
+    Instruction secondInstruction = new MulInstruction(null, EBX, EBX);
+    boolean isEquals = instruction.equals(secondInstruction);
+    Assertions.assertFalse(isEquals);
+  }
 }

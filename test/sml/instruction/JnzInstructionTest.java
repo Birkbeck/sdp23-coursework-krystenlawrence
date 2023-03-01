@@ -6,13 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sml.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import static sml.Registers.Register.EAX;
 import static sml.Registers.Register.EBX;
-import static sml.Registers.Register.ECX;
 
 class JnzInstructionTest {
   private Machine machine;
@@ -31,7 +26,7 @@ class JnzInstructionTest {
   }
 
   @Test
-  void executeValid() throws IOException {
+  void executeValid() {
     machine.getLabels().addLabel("f3",0);
     registers.set(EAX, 5);
     Instruction jnzInstruction = new JnzInstruction(null, "f3", EAX);
@@ -40,18 +35,16 @@ class JnzInstructionTest {
   }
 
   @Test
-  void executeValidTwo() throws IOException {
+  void executeValidTwo() {
     machine.getLabels().addLabel("f3",0);
     registers.set(EAX, 0);
     Instruction jnzInstruction = new JnzInstruction(null, "f3", EAX);
     jnzInstruction.execute(machine);
-    Assertions.assertEquals(-1, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(0, machine.getRegisters().get(EAX));
   }
 
   @Test
   void assertObjectsTrue() {
-    registers.set(EAX, 6);
-    registers.set(EBX, 10);
     Instruction instruction = new JnzInstruction(null, "ab", EBX);
     Instruction secondInstruction = new JnzInstruction(null, "ab", EBX);
     boolean isEquals = instruction.equals(secondInstruction);
@@ -60,8 +53,6 @@ class JnzInstructionTest {
 
   @Test
   void assertObjectsFalse() {
-    registers.set(EAX, 2);
-    registers.set(EBX, 10);
     Instruction instruction = new JnzInstruction(null, "ab", EBX);
     Instruction secondInstruction = new JnzInstruction(null, "ba", EBX);
     boolean isEquals = instruction.equals(secondInstruction);

@@ -9,6 +9,7 @@ import sml.Machine;
 import sml.Registers;
 
 import static sml.Registers.Register.EAX;
+import static sml.Registers.Register.EBX;
 
 class MovInstructionTest {
   private Machine machine;
@@ -31,6 +32,22 @@ class MovInstructionTest {
     Instruction instruction = new MovInstruction(null, 7, EAX);
     instruction.execute(machine);
     Assertions.assertEquals(7, machine.getRegisters().get(EAX));
+  }
+
+  @Test
+  void assertObjectsTrue() {
+    Instruction instruction = new MovInstruction(null, 4, EBX);
+    Instruction secondInstruction = new MovInstruction(null, 4, EBX);
+    boolean isEquals = instruction.equals(secondInstruction);
+    Assertions.assertTrue(isEquals);
+  }
+
+  @Test
+  void assertObjectsFalse() {
+    Instruction instruction = new MovInstruction(null, 4, EBX);
+    Instruction secondInstruction = new MovInstruction(null, 5, EBX);
+    boolean isEquals = instruction.equals(secondInstruction);
+    Assertions.assertFalse(isEquals);
   }
 
 }

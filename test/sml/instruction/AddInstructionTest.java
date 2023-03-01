@@ -44,4 +44,20 @@ class AddInstructionTest {
     instruction.execute(machine);
     Assertions.assertEquals(1, machine.getRegisters().get(EAX));
   }
+
+  @Test
+  void assertObjectsTrue() {
+    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Instruction secondInstruction = new AddInstruction(null, EAX, EBX);
+    boolean isEquals = instruction.equals(secondInstruction);
+    Assertions.assertTrue(isEquals);
+  }
+
+  @Test
+  void assertObjectsFalse() {
+    Instruction instruction = new AddInstruction(null, EAX, EBX);
+    Instruction secondInstruction = new AddInstruction(null, EBX, EBX);
+    boolean isEquals = instruction.equals(secondInstruction);
+    Assertions.assertFalse(isEquals);
+  }
 }

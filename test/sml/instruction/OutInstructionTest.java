@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static sml.Registers.Register.EAX;
+import static sml.Registers.Register.EBX;
 
 class OutInstructionTest {
 
@@ -40,6 +41,22 @@ class OutInstructionTest {
     Instruction instruction = new OutInstruction(null, EAX);
     instruction.execute(machine);
     Assertions.assertEquals("10\r\n", out.toString());
+  }
+
+  @Test
+  void assertObjectsTrue() {
+    Instruction instruction = new OutInstruction(null, EAX);
+    Instruction secondInstruction = new OutInstruction(null, EAX);
+    boolean isEquals = instruction.equals(secondInstruction);
+    Assertions.assertTrue(isEquals);
+  }
+
+  @Test
+  void assertObjectsFalse() {
+    Instruction instruction = new OutInstruction(null, EAX);
+    Instruction secondInstruction = new OutInstruction(null, EBX);
+    boolean isEquals = instruction.equals(secondInstruction);
+    Assertions.assertFalse(isEquals);
   }
 
 }
