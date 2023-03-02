@@ -1,12 +1,12 @@
 package sml;
 
-
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
- * This class ....
+ * This class reads the given .sml file and translates it into a form that the machine can use by
+ * creating the correct Instruction
  * <p>
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
  *

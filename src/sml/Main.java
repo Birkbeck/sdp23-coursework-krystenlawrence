@@ -1,7 +1,5 @@
 package sml;
 
-import java.io.IOException;
-
 public class Main {
 	/**
 	 * Initialises the system and executes the program.
