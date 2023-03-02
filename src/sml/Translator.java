@@ -2,11 +2,8 @@ package sml;
 
 
 import java.io.File;
-import java.lang.reflect.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-
-import static sml.Registers.Register;
 
 /**
  * This class ....
