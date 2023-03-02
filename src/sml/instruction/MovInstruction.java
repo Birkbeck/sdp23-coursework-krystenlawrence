@@ -23,27 +23,51 @@ public class MovInstruction extends Instruction {
 		this.result = result;
 	}
 
+	/**
+	 * Executes the move instruction in the given machine.
+	 *
+	 * @param machine the machine the instruction runs on
+	 * @return the NORMAL_PROGRAM_COUNTER_UPDATE to indicate that
+	 * the instruction with the next address is to be executed
+	 */
 	@Override
-	public int execute(Machine m) {
-		m.getRegisters().set(result, integer);
+	public int execute(Machine machine) {
+		machine.getRegisters().set(result, integer);
 		return NORMAL_PROGRAM_COUNTER_UPDATE;
 	}
 
+	/**
+	 * String representation of the values of the movInstruction object
+	 * in the form "label opcode result source"
+	 *
+	 * @return the string representation of the jnz instruction
+	 */
 	@Override
 	public String toString() {
 		return getLabelString() + getOpcode() + " " + result + " " + integer;
 	}
 
+	/**
+	 * Asserts whether a given object is the same as this object
+	 *
+	 * @param obj the given object to assert
+	 * @return a boolean depending on whether the objects are the same
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof MovInstruction m) {
-			return this.getClass().equals(m.getClass())
-					&& this.result.equals(m.result)
-					&& this.integer == m.integer;
+		if (obj instanceof MovInstruction movInstruction) {
+			return this.getClass().equals(movInstruction.getClass())
+					&& this.result.equals(movInstruction.result)
+					&& this.integer == movInstruction.integer;
 		}
 		return false;
 	}
 
+	/**
+	 * Returns the hashCode of the object
+	 *
+	 * @return an int of the given object
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(result, integer);

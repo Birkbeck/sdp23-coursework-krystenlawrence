@@ -24,30 +24,54 @@ public class JnzInstruction extends Instruction {
 		this.source = source;
 	}
 
+	/**
+	 * Executes the jump instruction in the given machine.
+	 *
+	 * @param machine the machine the instruction runs on
+	 * @return the new program counter to indicate that
+	 * the instruction with the given label is to be executed
+	 */
 	@Override
-	public int execute(Machine m) {
-		int value = m.getRegisters().get(source);
+	public int execute(Machine machine) {
+		int value = machine.getRegisters().get(source);
 		if(value != 0){
-			return m.getLabels().getAddress(givenLabel);
+			return machine.getLabels().getAddress(givenLabel);
 		}
 		return NORMAL_PROGRAM_COUNTER_UPDATE;
 	}
 
+	/**
+	 * String representation of the values of the jnzInstruction object
+	 * in the form "label opcode result source"
+	 *
+	 * @return the string representation of the jnz instruction
+	 */
 	@Override
 	public String toString() {
 		return getLabelString() + getOpcode() + " " + source + " " + givenLabel;
 	}
 
+	/**
+	 * Asserts whether a given object is the same as this object
+	 *
+	 * @param obj the given object to assert
+	 * @return a boolean depending on whether the objects are the same
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof JnzInstruction j) {
-			return this.getClass().equals(j.getClass())
-					&& this.source.equals(j.source)
-					&& this.givenLabel.equals(j.givenLabel);
+		if (obj instanceof JnzInstruction jnzInstruction) {
+			return this.getClass().equals(jnzInstruction.getClass())
+					&& this.source.equals(jnzInstruction.source)
+					&& this.givenLabel.equals(jnzInstruction.givenLabel);
 		}
 		return false;
 	}
 
+	/**
+	 * Returns the hashCode of the object
+	 *
+	 * @return an int of the given object
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(source, givenLabel);
