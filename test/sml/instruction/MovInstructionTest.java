@@ -36,16 +36,16 @@ class MovInstructionTest {
 
   @Test
   void assertObjectsTrue() {
-    Instruction instruction = new MovInstruction(null, 4, EBX);
-    Instruction secondInstruction = new MovInstruction(null, 4, EBX);
+    Instruction instruction = new MovInstruction(null, EBX, 4);
+    Instruction secondInstruction = new MovInstruction(null, EBX, 4);
     boolean isEquals = instruction.equals(secondInstruction);
     Assertions.assertTrue(isEquals);
   }
 
   @Test
   void assertObjectsFalse() {
-    Instruction instruction = new MovInstruction(null, 4, EBX);
-    Instruction secondInstruction = new MovInstruction(null, 5, EBX);
+    Instruction instruction = new MovInstruction(null, EBX, 4);
+    Instruction secondInstruction = new MovInstruction(null, EBX, 5);
     boolean isEquals = instruction.equals(secondInstruction);
     Assertions.assertFalse(isEquals);
   }
