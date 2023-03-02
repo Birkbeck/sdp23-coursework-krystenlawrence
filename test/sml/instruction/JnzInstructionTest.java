@@ -29,7 +29,7 @@ class JnzInstructionTest {
   void executeValid() {
     machine.getLabels().addLabel("f3",0);
     registers.set(EAX, 5);
-    Instruction jnzInstruction = new JnzInstruction(null, "f3", EAX);
+    Instruction jnzInstruction = new JnzInstruction(null, EAX, "f3");
     jnzInstruction.execute(machine);
     Assertions.assertEquals(5, machine.getRegisters().get(EAX));
   }
@@ -38,23 +38,23 @@ class JnzInstructionTest {
   void executeValidTwo() {
     machine.getLabels().addLabel("f3",0);
     registers.set(EAX, 0);
-    Instruction jnzInstruction = new JnzInstruction(null, "f3", EAX);
+    Instruction jnzInstruction = new JnzInstruction(null, EAX, "f3");
     jnzInstruction.execute(machine);
     Assertions.assertEquals(0, machine.getRegisters().get(EAX));
   }
 
   @Test
   void assertObjectsTrue() {
-    Instruction instruction = new JnzInstruction(null, "ab", EBX);
-    Instruction secondInstruction = new JnzInstruction(null, "ab", EBX);
+    Instruction instruction = new JnzInstruction(null, EBX, "ab");
+    Instruction secondInstruction = new JnzInstruction(null, EBX, "ab");
     boolean isEquals = instruction.equals(secondInstruction);
     Assertions.assertTrue(isEquals);
   }
 
   @Test
   void assertObjectsFalse() {
-    Instruction instruction = new JnzInstruction(null, "ab", EBX);
-    Instruction secondInstruction = new JnzInstruction(null, "ba", EBX);
+    Instruction instruction = new JnzInstruction(null, EBX, "ab");
+    Instruction secondInstruction = new JnzInstruction(null, EBX, "ba");
     boolean isEquals = instruction.equals(secondInstruction);
     Assertions.assertFalse(isEquals);
   }
