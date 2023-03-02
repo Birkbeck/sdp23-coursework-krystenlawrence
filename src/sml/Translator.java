@@ -68,45 +68,15 @@ public final class Translator {
         // A list of values that have been read from the sml file that will be used to construct
         // the type of Instruction. Opcode has been removed and label is added whether it is null
         // or not, hence the String.valueOf(). Subsequent commands are added.
-        List<String> lineVariables = new ArrayList<>();
+        ArrayList<String> lineVariables = new ArrayList<>();
         lineVariables.add(String.valueOf(label));
         while (line.contains(" ")) {
             lineVariables.add(scan());
         }
 
-        // Create the class name by capitalising the first letter then adding the package and
-        // Instruction
-        opcode = opcode.substring(0, 1).toUpperCase() + opcode.substring(1);
-        Class<?> unknownClass = Class.forName("sml.instruction." + opcode + "Instruction");
+        InstructionFactory instructionFactory = new InstructionFactory();
 
-        for (Constructor<?> constructor : unknownClass.getConstructors()) {
-
-            Object[] classConstructors = new Object[lineVariables.size()];
-            Class<?>[] constructorParamTypes = constructor.getParameterTypes();
-            // Find the constructors, parse them and marry them with the variables read from the
-            // .sml file
-
-            for (int i = 0; i < lineVariables.size(); i++) {
-
-                Class<?> newClass = toWrapper(constructorParamTypes[i]);
-                // Assume only constructors of type Integer, Register and String will be used
-                if (newClass.getName().contains("Register")) {
-                    classConstructors[i] = Register.valueOf(lineVariables.get(i));
-                } else if (newClass.getName().contains("Integer")) {
-                    classConstructors[i] = Integer.parseInt(lineVariables.get(i));
-                } else if (newClass.getName().contains("String")) {
-                    classConstructors[i] = (lineVariables.get(i).contains("null"))
-                            ? null
-                            : lineVariables.get(i);
-                } else{
-                    throw new NoSuchFieldException(newClass.getName() + " is not currently used");
-                }
-            }
-            return (Instruction) constructor.newInstance(classConstructors);
-
-        }
-
-        return null;
+        return instructionFactory.createInstruction(opcode, lineVariables);
     }
 
 
@@ -135,19 +105,5 @@ public final class Translator {
             }
 
         return line;
-    }
-
-    // Only Integer is used at the moment, more can be added if needs be
-    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_WRAPPERS = Map.of(
-            int.class, Integer.class);
-
-    /**
-     * Return the correct Wrapper class if testClass is primitive
-     *
-     * @param testClass class being tested
-     * @return Object class or testClass
-     */
-    private static Class<?> toWrapper(Class<?> testClass) {
-        return PRIMITIVE_TYPE_WRAPPERS.getOrDefault(testClass, testClass);
     }
 }
